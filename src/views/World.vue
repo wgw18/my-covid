@@ -1,5 +1,5 @@
 <template>
-    <div class="world">
+    <div class="world" @click.stop="setWidth='0'">
         <div class="msg" v-if="hoverObj.flag" :style="{top:hoverObj.y,left:hoverObj.x}">
             <li class="name" >{{ hoverObj.name }}</li>
             <li>累计：{{ hoverObj.value}}</li>
@@ -32,11 +32,16 @@
     <dv-border-box-5 class="worldTop" :color="['#5CA4C4', '#467DB1']" :reverse="true">
         <dv-scroll-ranking-board :config="config" class="scrollTop"/>
     </dv-border-box-5>
+    <svg class="icon icon-set" aria-hidden="true" @click="setWidth='30%'">
+        <use xlink:href="#icon-shezhi"></use>
+    </svg>
+    <Set class="set-component"  :style="{width:setWidth}"></Set>
 </template>
 
 <script setup>
 import DigitalFlop from '@/components/DigitalFlop.vue';
-import { useAllDataStore } from '../store/index'
+import Set from '@/components/Set.vue'
+import { useAllDataStore ,useSetDataStore} from '../store/index'
 import { storeToRefs } from 'pinia'
 import { ref, computed, watch, onMounted } from 'vue';
 import worldJson from "echarts/map/json/world.json"
@@ -64,6 +69,7 @@ let countryData = ref([]),
     die = ref(0),
     recure = ref(0),
     configData = ref([]),
+    setWidth = ref("0"),
     econNumMax = 0,
     econNumMin = Infinity,
     econNumTop50 = 0,
@@ -109,16 +115,19 @@ let div = null,
     renderer = null,        //创建渲染器对象
     camera = null           //创建相机对象
 
-const gui = new dat.GUI();
-let controls = {
-  rotationSpeed: 0.00005,  //弧度每毫秒
-}
-gui.add(controls, 'rotationSpeed', 0, 0.001)
-gui.domElement.style = 'position:absolute;top:10px;right:10px;z-index:100;'
+// const gui = new dat.GUI();
+// let controls = {
+//   rotationSpeed: 0.00005,  //弧度每毫秒
+// }
+// gui.add(controls, 'rotationSpeed', 0, 0.001)
+// gui.domElement.style = 'position:absolute;top:10px;right:10px;z-index:100;'
 
     // store
 const store = useAllDataStore()
 const { allData } = storeToRefs(store)
+
+const store1 = useSetDataStore()
+const { setData } = storeToRefs(store1)
 
 
 
@@ -283,7 +292,7 @@ function createPointMesh( pos , scale,val) {
     mesh.name = 'country'
     mesh.val = val
     var size = radius * 0.02;//矩形平面Mesh的尺寸
-    mesh.size = size * (6 * scale + 1)
+    mesh.size = size * (4 * scale + 1.5)
     mesh._s = Math.random() * 1.0 + 1.0; //自定义属性._s表示mesh在原始大小基础上放大倍数  光圈在原来mesh.size基础上1~2倍之间变化
     mesh.scale.set( size, size, size );//设置mesh大小
     //设置mesh位置
@@ -407,10 +416,10 @@ function render() {
         T0 = T1;//把本次时间赋值给上次时间
         for(let m in worldMesh){
             if(!!worldMesh[m]){
-                worldMesh[m].rotateY(controls.rotationSpeed*t)
+                worldMesh[m].rotateY(setData.value.rotationSpeed*t)
             }
         }
-        earthGroup.rotateY(controls.rotationSpeed*t)
+        earthGroup.rotateY(setData.value.rotationSpeed*t)
 
         ringArr.forEach(function (mesh) {
             mesh._s += 0.007;
@@ -465,12 +474,12 @@ function draw(){
     // earth8k  night8k earth earthNight earthBorder   0x444444 0xaaaaaa
     // initEarth(earth,0xaaaaaa)        
     initEarth(earth8k,0x333333)         
-    initRing()
+    // initRing()
     scene.add(earthGroup)
     initMap(0x008fff)    //国家边界
     initHalo()
     initUniverse()
-    initStars()
+    // initStars()
     initLight()
 
     let width = div.clientWidth,
@@ -488,7 +497,7 @@ function draw(){
     renderer.setSize(width, height);//设置渲染区域尺寸
     renderer.setClearColor(0xb9d3ff, 1); //设置背景颜色
     div.appendChild(renderer.domElement); //body元素中插入canvas对象
-    div.appendChild(gui.domElement)
+    // div.appendChild(gui.domElement)
 
     orbitControls = new OrbitControls(camera,renderer.domElement)//创建控件对象
     render();
@@ -537,6 +546,7 @@ function draw(){
     .digitalFlop{
         width: 100%;
         height: 25%;
+        transition: width 0.5s;
     }
 }
 .worldTop{
@@ -551,5 +561,32 @@ function draw(){
     right:0;
     display: flex;
     flex-direction: column;
+}
+
+
+.icon-set{
+    width: 8vw;
+    height: 8vw;
+    color: white;
+    position: absolute;
+    right: 1.5%;
+    bottom: 3%;
+    opacity: 0.4;
+    transition-property: transform , opacity;
+    transition-duration:0.5s , 0.5s;
+}
+.icon-set:hover{
+    transform: rotate(90deg);
+    opacity:1;
+}
+.set-component{
+    width: 0;
+    height: 80%;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-top-left-radius: 10%;
+    position: absolute;
+    right: 0;
+    top:15%;
+    transition: width 0.5s ease-out;
 }
 </style>

@@ -6,14 +6,28 @@
       <!-- <dv-border-box-8 class="footer"> -->
       <div class="header">
           <router-link :to="{name:'world'}" class="world subnav">
-            全球分析
+            <svg class="icon icon-header" aria-hidden="true" >
+                <use xlink:href="#icon-icon-quanqiu"></use>
+            </svg>
+            <span>全球分析</span>
           </router-link>
           <router-link :to="{name:'china'}" class="China subnav">
-            国内分析
+            <svg class="icon icon-header" aria-hidden="true" >
+                <use xlink:href="#icon-guoneiyou"></use>
+            </svg>
+            <span>国内分析</span>
           </router-link>
-          <div class="subnav tableBtn" @click="clickDrawer()">表格</div>
+          <div class="subnav tableBtn" @click="clickDrawer()">
+            <svg class="icon icon-header" aria-hidden="true" >
+                <use xlink:href="#icon-biaoge"></use>
+            </svg>
+            <span>表格分析</span>
+          </div>
           <router-link :to="{name:'jwsr'}" class="jwsr subnav">
-            境外输入
+            <svg class="icon icon-header" aria-hidden="true" >
+                <use xlink:href="#icon-jingwairenyuan"></use>
+            </svg>
+            <span>境外输入</span>
           </router-link>
       </div>
     </dv-border-box-9>
@@ -193,12 +207,22 @@ const gridData = [
         border: 1px #798FD3 solid;
         background-color: #467DB1;
         border-radius: 4px;
-        line-height: 170%;
-        text-align: center;
-        font-size: 150%;
+        line-height: 280%;
+        font-size: 100%;
         text-decoration: none;
         float: left;
         color: white;
+        display: flex;
+        .icon-header{
+          width: 2vw;
+          height: 100%;
+          color: white;
+          display: block;
+          transform: translateX(50%);
+        }
+        span{
+          transform: translateX(20%);
+        }
       }
       .jwsr{
         float: right;
@@ -207,6 +231,7 @@ const gridData = [
       .tableBtn{
         float: right;
       }
+
     }
     .table{
       background-color: rgba(0,0,0,0.1);

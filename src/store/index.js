@@ -33,3 +33,15 @@ export const useAllDataStore = defineStore('allData', () => {
 
   return { allData, updateData }
 })
+
+export const useSetDataStore = defineStore('setData', () => {
+  const setData = ref({
+    rotationSpeed : 0.00005,   //弧度每秒
+
+  })
+  function updateSpeed(s) {
+    setData.value.rotationSpeed = s
+  }
+
+  return { setData, updateSpeed }
+})

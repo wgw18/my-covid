@@ -1,0 +1,51 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "162882",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "f018f",
+      "unicode_decimal": 983439
+    },
+    {
+      "icon_id": "1167163",
+      "name": "国内游",
+      "font_class": "guoneiyou",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "1305461",
+      "name": "表格",
+      "font_class": "biaoge",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "1315530",
+      "name": "全球地图",
+      "font_class": "icon-quanqiu",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "7226335",
+      "name": "表格",
+      "font_class": "biaoge1",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "15921409",
+      "name": "境外人员",
+      "font_class": "jingwairenyuan",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    }
+  ]
+}

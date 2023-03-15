@@ -6,6 +6,8 @@ import './assets/reset.css'
 import  dataV  from "@jiaminghi/data-view";
 import router from './router'
 import { createPinia } from 'pinia'
+// import "./assets/font/iconfont.css"
+import "./assets/font/iconfont"
 
 const app = createApp(App)
 app.use(dataV)
