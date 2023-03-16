@@ -36,7 +36,12 @@ export const useAllDataStore = defineStore('allData', () => {
 
 export const useSetDataStore = defineStore('setData', () => {
   const setData = ref({
-    rotationSpeed : 0.00005,   //弧度每秒
+    rotationSpeed : 1,  
+    autoRotate:true,
+    isDrag:true,
+    isZoom:true,
+    isRippling:true,
+    isBeam:true
 
   })
   function updateSpeed(s) {

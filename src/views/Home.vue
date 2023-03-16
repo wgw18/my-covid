@@ -32,6 +32,7 @@
       </div>
     </dv-border-box-9>
 
+    <!-- 表格抽屉 -->
     <el-drawer
     v-model="drawer"
     title="全国/全球疫情数据"
@@ -44,7 +45,11 @@
         size="large"
         active-text="全球数据"
         inactive-text="全国数据"
-      />
+    />
+    <el-input v-model="search" placeholder="回车搜索" clearable 
+    @keyup.enter="enterSearch(search)"
+    class="search"
+    />
     <el-table :data="drawData"
       style="
       --el-table-bg-color:rgba(0,0,0,.8);
@@ -85,7 +90,8 @@ let sinaData = ref({}),            //疫情所有数据
     adddaily = ref([]),
     drawer = ref(false),
     drawData = ref([]),
-    tableSwitch = ref(false)
+    tableSwitch = ref(false),
+    search = ref('')
 const routerCur = useRouter()
 onMounted(()=>{
   // router.push('/world')
@@ -121,44 +127,18 @@ function getMsg(){
 function clickDrawer(){
   drawer.value = true
   drawData.value = tableSwitch.value?allData.countryTableData:allData.cityTableData
-  // switch(routerCur.currentRoute.value.name) {
-  //   case 'world':
-  //     console.log('world');
-      
-  //     break
-  //   case 'china':
-  //     console.log('china');
-  //     break
-  //   case 'jwsr':
-  //     console.log('jwsr');
-  //     break
-  //   default:
-  //     break
-  // }
 }
 
-const gridData = [
-  {
-    date: '2016-05-02',
-    name: 'Peter Parker',
-    address: 'Queens, New York City',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Peter Parker',
-    address: 'Queens, New York City',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Peter Parker',
-    address: 'Queens, New York City',
-  },
-  {
-    date: '2016-05-03',
-    name: 'Peter Parker',
-    address: 'Queens, New York City',
-  },
-]
+
+function enterSearch(matchStr) {
+    drawData.value = tableSwitch.value?allData.countryTableData:allData.cityTableData
+    if (matchStr == "") {
+        return
+    }
+    drawData.value  = drawData.value.filter(val=>{
+      return val.name.search(matchStr) >= 0
+    })
+}
 
 
 </script>
@@ -218,7 +198,7 @@ const gridData = [
           height: 100%;
           color: white;
           display: block;
-          transform: translateX(50%);
+          transform: translateX(30%);
         }
         span{
           transform: translateX(20%);
@@ -233,8 +213,11 @@ const gridData = [
       }
 
     }
-    .table{
-      background-color: rgba(0,0,0,0.1);
+    /deep/.table{
+      background-color: rgba(0,0,0,0.8);
+    }
+    /deep/.search{
+      width: 20%;
     }
 }
 

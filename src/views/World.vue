@@ -8,6 +8,8 @@
             <li>死亡：{{ hoverObj.deathNum }}</li>
         </div>
     </div>
+
+    <!-- 确诊数字 -->
     <dv-border-box-5 class="worldNum" :color="['#5CA4C4', '#467DB1']">
         <DigitalFlop class="digitalFlop" 
         :data="certain" title="现存确诊" 
@@ -29,13 +31,18 @@
         color="#C9EBE0" 
         :time="1"></DigitalFlop>        
     </dv-border-box-5>
+
+    <!-- 确诊排名 -->
     <dv-border-box-5 class="worldTop" :color="['#5CA4C4', '#467DB1']" :reverse="true">
         <dv-scroll-ranking-board :config="config" class="scrollTop"/>
     </dv-border-box-5>
+
+    <!-- 设置按钮 -->
     <svg class="icon icon-set" aria-hidden="true" @click="setWidth='30%'">
         <use xlink:href="#icon-shezhi"></use>
     </svg>
-    <Set class="set-component"  :style="{width:setWidth}"></Set>
+
+    <Set class="set-component"  :style="{width:setWidth}" @changeSetData="changeSetData" ></Set> //设置组件
 </template>
 
 <script setup>
@@ -138,6 +145,35 @@ onMounted(() => {
 watch(()=>allData.value.updated,()=>{
     draw()
 })
+
+//设置切换
+function changeSetData(type) {
+//   (type == "sphereType") && (destroyScene(), init(sphereData.value));//球体类型切换
+(type == "rotationSpeed") && (orbitControls.autoRotateSpeed = setData.value.rotationSpeed);
+  (type == "autoRotate") && (orbitControls.autoRotate = setData.value.autoRotate);
+  (type == "isDrag") && (orbitControls.enableRotate = setData.value.isDrag);//鼠标拖拽旋转
+  (type == "isZoom") && (orbitControls.enableZoom = setData.value.isZoom);//鼠标缩放
+//   (type == "dataType") && (location.reload());//刷新页面重新获取数据源
+};
+
+const destroyObject = (object, parent) => {
+    parent.remove(object);
+    const children = object.children;
+    if (!children) return;
+    children.forEach(({ geometry, material, children }) => {
+        geometry.dispose();
+        if (Array.isArray(material)) {
+            material.forEach((m) => m.dispose());
+        } else material?.dispose();
+        if (children.length) children.forEach((item) => destroyObject(item, object));
+    });
+};
+
+
+
+
+
+
 function getData(){
     countryData.value = allData.value.worldlist.map(val=>{
         return {
@@ -268,9 +304,8 @@ function initRing(){
             // ringGroup.add(createPointMesh(posObj))
             let scale = val.econNum / econNumMax,  //0-1
                 scale2 = val.econNum / econNumTop50
-            ringArr.push(createPointMesh(posObj,scale,val))
-            scale2 >= 1 && createBeamMesh(posObj,scale,index)
-            
+            if(setData.value.isRippling)ringArr.push(createPointMesh(posObj,scale,val))
+            if(setData.value.isRippling && scale2 >= 1)createBeamMesh(posObj,scale,index)
         }
     })
     for(let i = 0;i<ringArr.length;i++){
@@ -409,17 +444,17 @@ function lglt2xyz(lng, lat, radius) {
     radius * Math.sin(theta) * Math.sin(phi),
 ]
 }
-let T0 = new Date();//上次时间
+// let T0 = new Date();//上次时间
 function render() {
-        let T1 = new Date();//本次时间
-        let t = T1-T0;//时间差
-        T0 = T1;//把本次时间赋值给上次时间
-        for(let m in worldMesh){
-            if(!!worldMesh[m]){
-                worldMesh[m].rotateY(setData.value.rotationSpeed*t)
-            }
-        }
-        earthGroup.rotateY(setData.value.rotationSpeed*t)
+        // let T1 = new Date();//本次时间
+        // let t = T1-T0;//时间差
+        // T0 = T1;//把本次时间赋值给上次时间
+        // for(let m in worldMesh){
+        //     if(!!worldMesh[m]){
+        //         worldMesh[m].rotateY(setData.value.rotationSpeed*t)
+        //     }
+        // }
+        // //earthGroup.rotateY(setData.value.rotationSpeed*t)
 
         ringArr.forEach(function (mesh) {
             mesh._s += 0.007;
@@ -429,11 +464,11 @@ function render() {
             mesh.size * mesh._s
             );
             if (mesh._s <= 1.5) {
-            mesh.material.opacity = (mesh._s - 1) * 2; //2等于1/(1.5-1.0)，保证透明度在0~1之间变化
+                mesh.material.opacity = (mesh._s - 1) * 2; //2等于1/(1.5-1.0)，保证透明度在0~1之间变化
             } else if (mesh._s > 1.5 && mesh._s <= 2) {
-            mesh.material.opacity = 1 - (mesh._s - 1.5) * 2; //2等于1/(2.0-1.5) mesh缩放2倍对应0 缩放1.5被对应1
+                mesh.material.opacity = 1 - (mesh._s - 1.5) * 2; //2等于1/(2.0-1.5) mesh缩放2倍对应0 缩放1.5被对应1
             } else {
-            mesh._s = 1.0;
+                mesh._s = 1.0;
             }
         });
         requestAnimationFrame(render)
@@ -474,7 +509,7 @@ function draw(){
     // earth8k  night8k earth earthNight earthBorder   0x444444 0xaaaaaa
     // initEarth(earth,0xaaaaaa)        
     initEarth(earth8k,0x333333)         
-    // initRing()
+    if(setData.value.isRippling || setData.value.isBeam)initRing()
     scene.add(earthGroup)
     initMap(0x008fff)    //国家边界
     initHalo()
@@ -500,6 +535,15 @@ function draw(){
     // div.appendChild(gui.domElement)
 
     orbitControls = new OrbitControls(camera,renderer.domElement)//创建控件对象
+    orbitControls.autoRotate = setData.value.rotationSpeed;
+    orbitControls.enableRotate = setData.value.isDrag;
+    orbitControls.enableZoom = setData.value.isZoom; 
+    orbitControls.autoRotateSpeed = setData.value.rotationSpeed; 
+    //orbitControls.enablePan = false; //右键平移拖拽
+    orbitControls.enableDamping = false; //滑动阻尼
+    orbitControls.dampingFactor = 0.05; //(默认.25)
+    orbitControls.minDistance = 150; //相机距离
+    orbitControls.maxDistance = 600; 
     render();
 }
 </script>
@@ -513,6 +557,7 @@ function draw(){
         border: 1px solid rgb(179, 255, 0);
         border-radius: 10%;
         position: absolute;
+        user-select:none;
         .name{
             color: red;
             height: 25%;
