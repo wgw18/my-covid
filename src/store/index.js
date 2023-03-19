@@ -41,7 +41,8 @@ export const useSetDataStore = defineStore('setData', () => {
     isDrag:true,
     isZoom:true,
     isRippling:true,
-    isBeam:true
+    isBeam:true,
+    earthType:'grain',   //night day grain
 
   })
   function updateSpeed(s) {

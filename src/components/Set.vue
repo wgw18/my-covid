@@ -12,6 +12,13 @@
             @change="changeSetData('rotationSpeed')"
             :step="0.1" style="--el-color-primary:#555555"/>
         </el-form-item>
+        <el-form-item label="地球类型:" class="form-item">
+            <el-radio-group v-model="setData.earthType" class="ml-4" @change="changeSetData('earthType')">
+                <el-radio label="day" size="large">白昼</el-radio>
+                <el-radio label="night" size="large">夜晚</el-radio>
+                <el-radio label="grain" size="large">粒子</el-radio>
+            </el-radio-group>            
+        </el-form-item>
         <el-form-item label="地球自转：" class="form-item">
             <el-switch v-model="setData.autoRotate" 
                 style=" --el-switch-on-color: #555555" 

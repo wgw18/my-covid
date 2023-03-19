@@ -6,7 +6,7 @@
       <div class="description">
         数据统计截至{{ time }}
       </div>
-      <!-- <dv-decoration-8 :reverse="true" style="width:300px;height:50px;" /> -->
+      <dv-decoration-10 style="width:100%;height:5px;" class="dec10"/>
     </dv-border-box-11>
     
   </div>
@@ -40,6 +40,9 @@ let props = defineProps({
       transform: translateX(-50%);
       text-align: center;
       
+    }
+    .dec10{
+      transform: translateY(10%);
     }
   }
 }

@@ -2,7 +2,7 @@
   <dv-loading class="loading" v-if="loadingFlag">Loading...</dv-loading>
   <div class="jwsrWrapper">
     <div class="jwsrLeft">
-      <div class="jwsrNum">
+      <dv-border-box-1 class="jwsrNum" :color="['#5CA4C4', '#467DB1']" backgroundColor="white">
         <DigitalFlop class="digitalFlop" 
         :data="certain" title="现存确诊" 
         color="#FAE3DD" 
@@ -22,13 +22,14 @@
         title="治愈" 
         color="#C9EBE0" 
         :time="1"></DigitalFlop>
-      </div>        
-
-      <div class="jwsr">
-
-      </div>
+      </dv-border-box-1>        
+      <dv-border-box-6 class="mapWrapper" :color="['#5CA4C4', '#467DB1']" backgroundColor="white">
+        <div class="jwsr"></div>
+      </dv-border-box-6>
     </div>
     <div class="jwsrRight">
+      <dv-decoration-6 style="width:300px;height:70px;" />
+      <!-- <dv-decoration-7 style="width:150px;height:30px;">境外输入TOP20</dv-decoration-7> -->
       <el-switch
         v-model="switchScroll"
         size="large"
@@ -695,16 +696,28 @@ function drawWorld() {
       width: 100%;
       height: 15%;
       margin-top: 2%;
-      display: flex;
+      // display: flex;
       .digitalFlop{
-        width: 20%;
-        height: 90%;
+        width: 15%;
+        height: 80%;
+        float: left;
+        margin-left: 8%;
+        margin-top: 2%;
       }
     }
-    .jwsr {
-      width: 100%;
-      height: 85%;
-    }    
+
+
+    .mapWrapper{
+      width: 95%;
+      height: 73%;
+      margin-top: 2%;
+      padding-left: 2%;
+      .jwsr {
+        width: 100%;
+        height: 85%;
+        transform: translateY(10%);
+      }              
+    }
   }
 
 
@@ -731,6 +744,7 @@ function drawWorld() {
       width: 90%;
       height: 70%;
       background-color: rgb(186, 185, 185);
+      border-radius: 5px;
     }
   }
 

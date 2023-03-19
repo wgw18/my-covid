@@ -1,7 +1,10 @@
 <template>
   <div class="home">
-    <dv-border-box-9 class="mainBorder" :color="['#5CA4C4', '#467DB1']" backgroundColor="white">
+      <dv-decoration-5 style="width:600px;height:40px;" class="dec5"/>
+
+    <!-- <dv-border-box-9 class="mainBorder" :color="['#5CA4C4', '#467DB1']" backgroundColor="white"> -->
       <Banner class="Banner" :time="time.toString()"></Banner>
+      <Screenfull class="Screenfull"></Screenfull>
       <router-view class="view"></router-view>
       <!-- <dv-border-box-8 class="footer"> -->
       <div class="header">
@@ -30,7 +33,7 @@
             <span>境外输入</span>
           </router-link>
       </div>
-    </dv-border-box-9>
+    <!-- </dv-border-box-9> -->
 
     <!-- 表格抽屉 -->
     <el-drawer
@@ -40,15 +43,15 @@
     size="90%"
     class="table"
     >
+    <el-input v-model="search" placeholder="回车搜索" clearable 
+    @keyup.enter="enterSearch(search)"
+    class="search"
+    />
     <el-switch
         v-model="tableSwitch"
         size="large"
         active-text="全球数据"
         inactive-text="全国数据"
-    />
-    <el-input v-model="search" placeholder="回车搜索" clearable 
-    @keyup.enter="enterSearch(search)"
-    class="search"
     />
     <el-table :data="drawData"
       style="
@@ -81,7 +84,7 @@ import { storeToRefs } from 'pinia'
 import router from '../router/index'
 import {dataSource1} from '../api/request'
 import Banner from '../components/Banner'
-
+import Screenfull from '@/components/Screenfull.vue';
 let sinaData = ref({}),            //疫情所有数据
     time = ref({}),
     history = ref([]),
@@ -152,6 +155,12 @@ function enterSearch(matchStr) {
     // .mainBorder{
     //   // position: absolute;
     // }
+    .dec5{
+      position: absolute;
+      left: 50%;
+      top:12%;
+      transform: translateX(-50%);
+    }
     .view{
       width: 100%;
       height: 100%;
@@ -161,6 +170,14 @@ function enterSearch(matchStr) {
       position: absolute;
       top: 1%;
       z-index: 20;
+    }
+    .Screenfull{
+      width: 5vw;
+      height: 5vw;
+      position: absolute;
+      right: 2%;
+      top:4%;
+      // z-index: 100;
     }
     .btn{
       position: absolute;
@@ -218,6 +235,7 @@ function enterSearch(matchStr) {
     }
     /deep/.search{
       width: 20%;
+      margin-right: 50px;
     }
 }
 
