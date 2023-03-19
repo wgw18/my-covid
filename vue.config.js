@@ -29,6 +29,11 @@ let devProxy = {
   },
 };
 const { defineConfig } = require('@vue/cli-service')
+const AutoImport = require('unplugin-auto-import/webpack')
+const Components = require('unplugin-vue-components/webpack')
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+
+
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave:false,  // 修改成false  eslint检测
@@ -38,4 +43,12 @@ module.exports = defineConfig({
     open: false,
     proxy: devProxy
   },
+  chainWebpack: (config) => {
+    config
+      .plugin('AutoImport')
+      .use(AutoImport({ resolvers: [ElementPlusResolver()] }))
+    config
+      .plugin('Components')
+      .use(Components({ resolvers: [ElementPlusResolver()] }))
+  }
 })

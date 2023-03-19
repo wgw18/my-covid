@@ -2,15 +2,15 @@
     <dv-loading class="loading" v-if="loadingFlag">Loading...</dv-loading>
     <dv-decoration-4 :reverse="true" class="dec4"/>
     <div class="world" @click.stop="setWidth='0'">
-        <div class="msg" v-if="hoverObj.flag" :style="{top:hoverObj.y,left:hoverObj.x}">
-            <li class="name" >{{ hoverObj.name }}</li>
-            <li>累计：{{ hoverObj.value}}</li>
-            <li>现存：{{ hoverObj.econNum }}</li>
-            <li>治愈：{{ hoverObj.cureNum }}</li>
-            <li>死亡：{{ hoverObj.deathNum }}</li>
-        </div>
-    </div>
 
+    </div>
+    <div class="msg" v-if="hoverObj.flag" :style="{top:hoverObj.y,left:hoverObj.x}">
+        <li class="name" >{{ hoverObj.name }}</li>
+        <li>累计：{{ hoverObj.value}}</li>
+        <li>现存：{{ hoverObj.econNum }}</li>
+        <li>治愈：{{ hoverObj.cureNum }}</li>
+        <li>死亡：{{ hoverObj.deathNum }}</li>
+    </div>
     <!-- 确诊数字 -->
     <dv-border-box-5 class="worldNum" :color="['#5CA4C4', '#467DB1']">
         <DigitalFlop class="digitalFlop" 
@@ -71,7 +71,7 @@ import star from '@/assets/img/star.jpg'
 // import photoEffect from '@/assets/img/Photoeffect.png'
 // import earth from '@/assets/img/earth.jpg'
 import earth8k from '@/assets/img/earth_8k.jpg'
-import earthNight from '@/assets/img/earthNight.png'
+import earthNight from '@/assets/img/earthNight.jpg'//png'
 // import night8k from '@/assets/img/night_8k.jpg'
 import earthNormal from '@/assets/img/earthNormal.jpg'
 import earthGrayscale from "@/assets/img/map_inverted.png";
@@ -81,7 +81,6 @@ import virusImg from "@/assets/img/virus.png";
 import wave from '@/assets/img/wave.png'
 import ringImg from "@/assets/img/ring_explosion.jpg";
 import light_column from '@/assets/img/light_column.png'
-import earthInverted from '@/assets/img/map_inverted.png'
 let loadingFlag = ref(true), //加载中flag
     countryData = ref([]),
     hoverObj = ref({flag:false}),
@@ -233,8 +232,10 @@ function destroyScene() {
   orbitControls = null
   div.removeEventListener("mousemove", onMousemove, false);
   div.innerHTML = null
-  div = null
+//   div = null
   renderer = null
+  ringArr = []
+  beamArr = []
 };
 
 //销毁组数据
@@ -776,6 +777,11 @@ function draw(){
     if(!allData.updated)return
     loadingFlag.value = false
     if(!countryData.value.length)getData()
+    setData.value.isRippling = true
+    setData.value.isBeam = true
+
+
+
     div = document.querySelector('.world')
     scene = new THREE.Scene();
 
@@ -842,7 +848,7 @@ function draw(){
     orbitControls.enableZoom = setData.value.isZoom; 
     orbitControls.autoRotateSpeed = setData.value.rotationSpeed; 
     //orbitControls.enablePan = false; //右键平移拖拽
-    orbitControls.enableDamping = false; //滑动阻尼
+    orbitControls.enableDamping = true; //滑动阻尼
     orbitControls.dampingFactor = 0.05; //(默认.25)
     orbitControls.minDistance = 150; //相机距离
     orbitControls.maxDistance = 600; 
@@ -865,16 +871,17 @@ function draw(){
 .world{
     width: 100%;
     height: 100%;
-    .msg{
+
+}
+.msg{
         width: 12%;
         height: 20%;
-        // border: 1px solid rgb(179, 255, 0);
-
         border: 1px solid 0x008fff;
         background-color: rgba(0, 0, 0, 0.7);
         border-radius: 10%;
         position: absolute;
         user-select:none;
+        z-index: 100;
         .name{
             color: red;
             height: 25%;
@@ -892,7 +899,6 @@ function draw(){
             margin-bottom: 2%;
         }
     }
-}
 .worldNum{
     width: 20%;
     height: 55%;
