@@ -139,10 +139,18 @@ watchEffect(()=>{
 //       })
 //   console.log(jwsrTopC,Array.from(dataMapC),dataMapC);
 // })
+import staticJwsrData from "@/assets/json/jwsr.json"
 function getMsg() {
   dataSource2().then((res) => {
+    // console.log('d2',res);
+    // if(res.data.result.data.length === 0){
+    //   jwsrData.value = staticJwsrData
+    //   console.log("境外输入api停用，暂时使用离线数据");
+    // }else{
+    //   jwsrData.value = res.data.result
+    // }
+    jwsrData.value = res.data
     loadingFlag.value = false
-    jwsrData.value = res.data.result
   })
 
 }

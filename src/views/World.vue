@@ -60,7 +60,7 @@ import DigitalFlop from '@/components/DigitalFlop.vue';
 import Set from '@/components/Set.vue'
 import { useAllDataStore ,useSetDataStore} from '../store/index'
 import { storeToRefs } from 'pinia'
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted , h} from 'vue';
 import worldJson from "echarts/map/json/world.json"
 import capitalMap from "@/utils/capitalMap"
 import * as THREE from "three";
@@ -155,8 +155,15 @@ const { setData } = storeToRefs(store1)
 
 
 onMounted(() => {
-    console.log(allData);
+    // console.log(allData);
     draw()
+    ElNotification({
+        message: h('i', { style: 'color: teal' },
+         '点击右下角设置可以改变地球类型~'),
+        position:'top-left',
+        duration: 10000,
+        offset:110,
+    })
 })
 watch(()=>allData.value.updated,()=>{
     draw()
@@ -988,5 +995,9 @@ function draw(){
 }
 .dec12{
     transform: translateY(-10%) translateX(10%);
+}
+
+/deep/.el-notification{
+    opacity: 0.6;
 }
 </style>

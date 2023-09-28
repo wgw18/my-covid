@@ -5,13 +5,13 @@ import App from './App.vue'
 import './assets/reset.css'
 import  dataV  from "@jiaminghi/data-view";
 import router from './router'
-import { createPinia } from 'pinia'
+import  pinia from "./store/store.js"
 // import "./assets/font/iconfont.css"
 import "./assets/font/iconfont"
 
 const app = createApp(App)
 app.use(dataV)
-app.use(router)
-app.use(createPinia())
+    .use(router)
+    .use(pinia)
 // app.use(ElementPlus)
 app.mount('#app')

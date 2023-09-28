@@ -1,10 +1,9 @@
 <template>
   <dv-full-screen-container>
-    <Home></Home>
+    <router-view></router-view>
   </dv-full-screen-container>
 </template>
 <script setup>
-import Home from './views/Home'
 </script>
 <style>
 .icon {

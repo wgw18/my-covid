@@ -7,6 +7,9 @@ function createServe(config) {
     //请求拦截器
     serve.interceptors.request.use(
         config => {
+            const token = sessionStorage.getItem('token')
+            config.headers.Authorization = token ;
+            // console.log('req',token);
             return config;
         },
         error => {

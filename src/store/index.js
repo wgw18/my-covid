@@ -1,5 +1,18 @@
-import { defineStore } from 'pinia';
+import { defineStore , createPinia} from 'pinia';
 import { ref} from 'vue';
+
+export const useUserStore = defineStore('userMsg', () => {
+  const userMsg = ref({
+    loginFlag:false
+
+  })
+  function loginCallback() {
+    userMsg.value.loginFlag = true
+  }
+
+  return { userMsg, loginCallback }
+})
+
 export const useAllDataStore = defineStore('allData', () => {
   const allData = ref({
     updated : false

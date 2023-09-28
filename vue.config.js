@@ -1,4 +1,12 @@
 let devProxy = {
+  '/login': {
+    target: process.env.VUE_APP_0,
+    ws: true,
+    changeOrigin: true,
+    pathRewrite: {
+      '/login': ''
+    },
+  },
   //获取疫情数据1
   '/dataSource1': {
     target: process.env.VUE_APP_1,

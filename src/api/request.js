@@ -26,3 +26,14 @@ export function getIpMsg(params = {}) {
         params
     })
 }
+
+export function login(params = {}){
+    return createServe({
+        method: "POST",
+        url: '/login',
+        data:{
+            ...params
+        }
+        
+    })
+}

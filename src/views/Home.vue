@@ -99,7 +99,7 @@ const routerCur = useRouter()
 onMounted(()=>{
   // router.push('/world')
   getMsg();
-  console.log(allData.cityTableData);
+  // console.log(allData.cityTableData);
 })
 watch(()=>tableSwitch.value,()=>{
   drawData.value = tableSwitch.value?allData.countryTableData:allData.cityTableData
@@ -117,13 +117,21 @@ function decodingStr(str) {
   let jsonObj = JSON.parse(unStr);
   return jsonObj;
 };
+import staticData from "@/assets/json/full_data.json"
 function getMsg(){
   dataSource1().then((res)=>{
-    sinaData.value = decodingStr(res.data)
+    // let offlineDataFlag = decodingStr(res.data).result.status.msg
+      sinaData.value.data = res?.data
+    // if(offlineDataFlag === 'offline'){
+    //   console.log("全球数据api停用，暂时使用离线数据");
+    //   sinaData.value.data = staticData
+    // }else{
+    //   sinaData.value = decodingStr(res.data)
+    // }
     let data = sinaData.value.data
     time.value = data.mtime
     updateData(data)
-    // console.log(allData,'alldata');
+ },(err)=>{
  })
 
 }
